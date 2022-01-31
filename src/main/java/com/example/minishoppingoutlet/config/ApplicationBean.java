@@ -9,8 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class ApplicationBean {
 
-
-    @Bean
+   @Bean
    public ModelMapper modelMapper(){
 
     ModelMapper mapper = new ModelMapper();
