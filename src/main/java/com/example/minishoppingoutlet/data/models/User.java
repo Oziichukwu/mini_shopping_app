@@ -8,7 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,7 +27,7 @@ public class User {
     @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Column(name =" LAST_NAME")
+    @Column(name ="LAST_NAME")
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
 
@@ -48,4 +50,9 @@ public class User {
     @UpdateTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss")
     private LocalDateTime updatedDate;
+
+    private String cartId;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Order> orderList = new ArrayList<>();
 }

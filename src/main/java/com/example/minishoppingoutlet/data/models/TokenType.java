@@ -1,7 +1,6 @@
 package com.example.minishoppingoutlet.data.models;
 
-public enum RoleType {
+public enum TokenType {
 
-    ROLE_USER,
-    ROLE_ADMIN
+    REFRESH, PASSWORD_RESET
 }
