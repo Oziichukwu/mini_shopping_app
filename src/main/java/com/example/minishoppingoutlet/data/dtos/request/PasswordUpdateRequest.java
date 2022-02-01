@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PasswordRequest {
+public class PasswordUpdateRequest {
 
     @Email(message = "email must not be null")
     private String email;
