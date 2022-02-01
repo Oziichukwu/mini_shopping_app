@@ -3,18 +3,18 @@ package com.example.minishoppingoutlet.controller;
 
 import com.example.minishoppingoutlet.data.dtos.request.CreateUserRequest;
 import com.example.minishoppingoutlet.data.dtos.request.LoginRequest;
+import com.example.minishoppingoutlet.data.dtos.request.PasswordResetRequest;
+import com.example.minishoppingoutlet.data.dtos.request.PasswordUpdateRequest;
 import com.example.minishoppingoutlet.data.dtos.response.ApiResponse;
 import com.example.minishoppingoutlet.data.dtos.response.CreateUserResponse;
 import com.example.minishoppingoutlet.data.dtos.response.JwtResponseToken;
+import com.example.minishoppingoutlet.exceptions.AuthenticationException;
 import com.example.minishoppingoutlet.exceptions.EmailNotFoundException;
 import com.example.minishoppingoutlet.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register (@Valid @RequestBody CreateUserRequest createUserRequest){
@@ -44,5 +44,20 @@ public class AuthController {
         }catch (EmailNotFoundException e){
             return new ResponseEntity<>(new ApiResponse(false,e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/password/update")
+    public ResponseEntity<?>updatePassword(@Valid @RequestBody PasswordUpdateRequest passwordUpdateRequest){
+
+        try{
+            authService.updatePassword(passwordUpdateRequest);
+            return new ResponseEntity<>(new ApiResponse(true, "User password is Successfully Updated"), HttpStatus.OK);
+        }catch (AuthenticationException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> forgotPassword(@PathVariable String username){
+        return null;
     }
 }
