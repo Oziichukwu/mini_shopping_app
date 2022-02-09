@@ -3,6 +3,7 @@ package com.example.minishoppingoutlet.data.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -19,9 +20,9 @@ import java.util.Set;
 @Table(name = "USER")
 public class User {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Long userId;
+    private String userId;
 
     @NotBlank(message = "firstName cannot be blank")
     @Column(name = "FIRST_NAME")
@@ -31,9 +32,9 @@ public class User {
     @NotBlank(message = "lastName cannot be blank")
     private String lastName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLES", joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
 
     @Column(unique = true)
@@ -44,6 +45,7 @@ public class User {
 
     private String password;
 
+    @CreationTimestamp
     @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss")
     private LocalDateTime publishedDate;
 
@@ -53,6 +55,6 @@ public class User {
 
     private String cartId;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Order> orderList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 }

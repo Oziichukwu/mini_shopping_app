@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
-@Table(name = "TOKEN")
 public class Token {
 
     @Id
@@ -23,7 +22,8 @@ public class Token {
 
     private TokenType type;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_user_id")
     private User user;
 
     @UpdateTimestamp

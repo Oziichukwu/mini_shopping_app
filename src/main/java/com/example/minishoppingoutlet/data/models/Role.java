@@ -19,6 +19,9 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String roleId;
 
+
+    private String name;
+
     @Enumerated(EnumType.STRING)
     @NaturalId
     @Column(length = 60)
