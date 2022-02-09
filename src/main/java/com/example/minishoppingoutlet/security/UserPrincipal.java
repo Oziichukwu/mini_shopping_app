@@ -21,7 +21,7 @@ import static java.lang.String.format;
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private Long id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;

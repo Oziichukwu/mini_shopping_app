@@ -7,6 +7,7 @@ import com.example.minishoppingoutlet.data.dtos.request.PasswordResetRequest;
 import com.example.minishoppingoutlet.data.dtos.response.CreateUserResponse;
 import com.example.minishoppingoutlet.data.dtos.response.JwtResponseToken;
 import com.example.minishoppingoutlet.data.models.Token;
+import com.example.minishoppingoutlet.data.models.TokenType;
 import com.example.minishoppingoutlet.data.models.User;
 import com.example.minishoppingoutlet.data.repositories.TokenRepository;
 import com.example.minishoppingoutlet.data.repositories.UserRepository;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -129,8 +131,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Token generatePasswordResetToken(String username) throws AuthenticationException {
-        return null;
+    public Token generatePasswordResetToken(String email) throws AuthenticationException {
+
+        User userToResetPassword = userRepository.findUserByEmail(email).orElseThrow(()->
+                new AuthenticationException("User with email does not exist"));
+
+        Token token = new Token();
+
+        token.setUser(userToResetPassword);
+        token.setType(TokenType.PASSWORD_RESET);
+        token.setToken(UUID.randomUUID().toString());
+        token.setExpiryDate(LocalDateTime.now().plusMinutes(30));
+
+        return tokenRepository.save(token);
     }
 
     private User internalFindUserByEmail(String email) {
