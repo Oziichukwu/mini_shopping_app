@@ -8,8 +8,10 @@ import com.example.minishoppingoutlet.data.dtos.request.PasswordUpdateRequest;
 import com.example.minishoppingoutlet.data.dtos.response.ApiResponse;
 import com.example.minishoppingoutlet.data.dtos.response.CreateUserResponse;
 import com.example.minishoppingoutlet.data.dtos.response.JwtResponseToken;
+import com.example.minishoppingoutlet.data.models.Token;
 import com.example.minishoppingoutlet.exceptions.AuthenticationException;
 import com.example.minishoppingoutlet.exceptions.EmailNotFoundException;
+import com.example.minishoppingoutlet.exceptions.TokenException;
 import com.example.minishoppingoutlet.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,7 +59,24 @@ public class AuthController {
         }
     }
 
-    public ResponseEntity<?> forgotPassword(@PathVariable String username){
-        return null;
+    @GetMapping("/password/reset/{username}")
+    public ResponseEntity<?> forgotPassword(@Valid @PathVariable String username){
+
+        try{
+            Token passwordResetToken = authService.generatePasswordResetToken(username);
+            return new ResponseEntity<>(passwordResetToken, HttpStatus.CREATED);
+        }catch (AuthenticationException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/password/reset/{token}")
+    public ResponseEntity<?> resetPassword(@PathVariable String token, @RequestBody PasswordResetRequest passwordResetRequest){
+        try{
+            authService.resetUserPassword(passwordResetRequest, token);
+            return new ResponseEntity<>(new ApiResponse(true, "Password reset Successful"), HttpStatus.OK);
+        }catch(AuthenticationException | TokenException e){
+            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 }
