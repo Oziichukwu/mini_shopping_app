@@ -23,4 +23,7 @@ public class Order {
     private BigDecimal orderTotal;
 
     private String userId;
+
+    @Transient
+    private Address deliveryAddress;
 }
