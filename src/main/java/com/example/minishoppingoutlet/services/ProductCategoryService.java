@@ -1,2 +1,6 @@
-package com.example.minishoppingoutlet.services;public interface ProductCategoryService {
+package com.example.minishoppingoutlet.services;
+
+public interface ProductCategoryService {
+
+
 }
