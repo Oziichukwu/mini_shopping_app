@@ -12,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product>findProductsByDescriptionContaining(String description);
 
-    List<Product> findallByName(String productName);
+    List<Product> findAllByName(String productName);
 
     List<Product> findProductByPriceGreaterThan(BigDecimal price);
 }
